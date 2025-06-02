@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
-from utils import mask_pii, demask_pii
+from utils import mask_pii
 from models import load_model, classify_email
 
 app = FastAPI()
@@ -17,13 +17,9 @@ def classify(request: EmailRequest):
     # Classify email
     category = classify_email(model, masked_email)
     
-    # Demask back to original
-    demasked_email = demask_pii(masked_email, entities)
-    
     return {
         "input_email_body": request.input_email_body,
         "list_of_masked_entities": entities,
         "masked_email": masked_email,
-        "category_of_the_email": category,
-        "demasked_email": demasked_email
+        "category_of_the_email": category
     }

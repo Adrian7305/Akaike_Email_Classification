@@ -56,19 +56,3 @@ def mask_pii(text: str) -> Tuple[str, List[Dict]]:
         masked_text = masked_text[:start] + placeholder + masked_text[end:]
 
     return masked_text, entities
-def demask_pii(masked_text: str, entities: List[Dict]) -> str:
-    """
-    Given `masked_text` (with placeholders like “[email]”) and the
-    `entities` list (each entry has position, classification, entity),
-    restore the original substrings at their exact positions.
-    """
-    result = masked_text
-    # Sort in ascending order of start‐index, so that earlier replacements
-    # don’t break the indices of later ones.
-    for ent in sorted(entities, key=lambda x: x["position"][0]):
-        start, end = ent["position"]
-        placeholder = f"[{ent['classification']}]"
-        original = ent["entity"]
-        # Replace the placeholder at the exact location with the original text.
-        result = result[:start] + original + result[start + len(placeholder):]
-    return result

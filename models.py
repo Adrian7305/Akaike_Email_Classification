@@ -8,7 +8,11 @@ MODEL_REPO = "adrian7305/email-classifier"
 MODEL_FILE = "model.joblib"
 
 def load_model() -> Pipeline:
-    model_path = hf_hub_download(repo_id=MODEL_REPO, filename=MODEL_FILE)
+    model_path = hf_hub_download(
+    repo_id=MODEL_REPO,
+    filename=MODEL_FILE,
+    cache_dir="/tmp/.hf_cache"
+)
     return load(model_path)
 
 def classify_email(model: Pipeline, email: str) -> str:
